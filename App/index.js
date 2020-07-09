@@ -101,9 +101,13 @@ export default class App extends React.Component {
                     <View style={styles.pickerContainer}>
                         <TouchableOpacity onPress={this.stop} style={[styles.button, styles.buttonStop]}>
                             <Text style={[styles.buttonText, styles.buttonTextStop]}>Reset</Text>
-                        </TouchableOpacity> 
+                        </TouchableOpacity>
                         <TouchableOpacity onPress={this.pause} style={[styles.button, styles.buttonPause]}>
+                        {!this.state.isPaused ? (
                             <Text style={[styles.buttonText, styles.buttonTextPause]}>Pause</Text>
+                        ) : (
+                            <Text style={[styles.buttonText, styles.buttonTextResume]}>Resume</Text>
+                        )} 
                         </TouchableOpacity>
                     </View>
                 ) : (
@@ -184,6 +188,10 @@ const styles = StyleSheet.create({
     },
     buttonTextPause: {
         color: "#FFD300"
+    },
+    buttonTextResume: {
+        color: "#FFD300",
+        fontSize: 40
     },
     timerText: {
         color: '#FFF',
