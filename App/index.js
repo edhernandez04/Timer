@@ -4,10 +4,11 @@ import Sound from 'react-native-sound'
 
 export default class App extends React.Component {
     state = {
-        remainingSeconds: 5,
+        remainingSeconds: 0,
         isRunning: false,
+        isPaused: false,
         selectedMinutes: '0',
-        selectedSeconds: '5'
+        selectedSeconds: '0'
     }
 
     interval = null;
@@ -33,14 +34,26 @@ export default class App extends React.Component {
     }))
 
     this.interval = setInterval(() => {
-        this.setState(state => ({ remainingSeconds: state.remainingSeconds - 1 }))
-    }, 1000)
+        if (this.state.isPaused){
+            this.setState(state => ({ remainingSeconds: state.remainingSeconds }))
+        } else {
+            this.setState(state => ({ remainingSeconds: state.remainingSeconds - 1 }))    
+        }
+        }, 1000)
     }
 
     stop = () => {
         clearInterval(this.interval);
         this.interval = null;
         this.setState({ remainingSeconds: 0, isRunning: false })
+    }
+
+    pause = () => {
+        if (this.state.isPaused) {
+            this.setState({ isPaused: false })
+        } else {
+            this.setState({ isPaused: true })
+        }
     }
 
     renderPickers = () => {
@@ -85,9 +98,14 @@ export default class App extends React.Component {
                     <Text style={styles.timerText}>{`${minutes}:${seconds}`}</Text>
                 ) : ( this.renderPickers() ) }
                 {this.state.isRunning ? (
-                    <TouchableOpacity onPress={this.stop} style={[styles.button, styles.buttonStop]}>
-                        <Text style={[styles.buttonText, styles.buttonTextStop]}>Stop</Text>
-                    </TouchableOpacity> 
+                    <View style={styles.pickerContainer}>
+                        <TouchableOpacity onPress={this.stop} style={[styles.button, styles.buttonStop]}>
+                            <Text style={[styles.buttonText, styles.buttonTextStop]}>Reset</Text>
+                        </TouchableOpacity> 
+                        <TouchableOpacity onPress={this.pause} style={[styles.button, styles.buttonPause]}>
+                            <Text style={[styles.buttonText, styles.buttonTextPause]}>Pause</Text>
+                        </TouchableOpacity>
+                    </View>
                 ) : (
                     <TouchableOpacity onPress={this.start} style={styles.button}>
                         <Text style={styles.buttonText}>Start</Text>
@@ -146,7 +164,16 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     buttonStop: {
-        borderColor: "#FF6347"
+        borderColor: "#FF6347",
+        width: screen.width / 2.5,
+        height: screen.width / 2.5,
+        margin: 3
+    },
+    buttonPause: {
+        borderColor: "#FFD300",
+        width: screen.width / 2.5,
+        height: screen.width / 2.5,
+        margin: 3
     },
     buttonText: {
         fontSize: 45,
@@ -154,6 +181,9 @@ const styles = StyleSheet.create({
     },
     buttonTextStop: {
         color: "#FF6347"
+    },
+    buttonTextPause: {
+        color: "#FFD300"
     },
     timerText: {
         color: '#FFF',
