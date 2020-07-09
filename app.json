@@ -17,10 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.TimerApp.Cache"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "android": {
+      "package": "com.TimerApp.Cache.android"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }

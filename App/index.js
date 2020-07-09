@@ -1,5 +1,6 @@
-import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Dimensions, Picker, Platform } from 'react-native';
+import React from 'react'
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Dimensions, Picker, Platform, Vibration } from 'react-native'
+import Sound from 'react-native-sound'
 
 export default class App extends React.Component {
     state = {
@@ -13,6 +14,8 @@ export default class App extends React.Component {
 
     componentDidUpdate(prevProp, prevState) {
         if (this.state.remainingSeconds === 0 && prevState.remainingSeconds !== 0) {
+            tada.play()
+            Vibration.vibrate()
             this.stop()
         }
     }
@@ -37,7 +40,7 @@ export default class App extends React.Component {
     stop = () => {
         clearInterval(this.interval);
         this.interval = null;
-        this.setState({ remainingSeconds: 5, isRunning: false })
+        this.setState({ remainingSeconds: 0, isRunning: false })
     }
 
     renderPickers = () => {
@@ -94,6 +97,13 @@ export default class App extends React.Component {
         );
     }
 }
+
+const tada = new Sound(require('../assets/tada.wav'), null, (error) => {
+    if (error) {
+      console.log('failed to load the sound', error);
+      return
+    }
+})
 
 const createArray = length => {
     const arr = []
